@@ -25,6 +25,7 @@ module.exports = function(options) {
                     user.queue.push(next);
                 else
                     res.status(rule.errorCode).send(rule.errorData);
+                return;
             }
             next();
         };
