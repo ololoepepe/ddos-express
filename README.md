@@ -45,7 +45,8 @@ List of rules to apply to each request. Example:
         { /*Allow 4 requests accessing the application API per checkInterval*/
             regexp: "^/api.*",
             flags: "i",
-            maxWeight: 4
+            maxWeight: 4,
+            queueSize: 4 /*If request limit is exceeded, new requests are added to the queue*/
         },
         { /*Only allow 1 search request per check interval.*/
             string: "/action/search",
@@ -82,11 +83,11 @@ Requests which did not match any rule or have passed the test are forwarded to t
 
 Every ```checkInterval``` milliseconds all users are checked. The weights are decremented by the ```maxWegight```. If user's weight becomes less than or equal to 0, that user is deleted from the map.
 
-# Example situation.
+# Example situation
 
 Say ```weight``` is 1, ```maxWeight``` is 10 and ```checkInterval``` is 1000.
 
-A user makes 35 requests in one second. First 10 request passws the module, the other 25 does not. The weight is 35 for now. Then the user stops sending requests.
+A user makes 35 requests in one second. First 10 request pass the module, the other 25 do not. The weight is 35 for now. Then the user stops sending requests.
 
 After 1 second passes by, the weight is decremented by 10 and becomes 25. The user attempts to make one more request, which does not pass. The weight becomes 26.
 

@@ -8,23 +8,36 @@ module.exports = function(options) {
         rule.errorCode = rule.errorCode || (options && options.errorCode) || 429;
         rule.errorData = (typeof rule.errorData != "undefined") ? rule.errorData
             : ((options && typeof options.errorData != "undefined") ? options.errorData : "Not so fast!");
+        rule.queueSize = rule.queueSize || 0;
         rule.use = function(req, res, next) {
             var user = rule.users.get(req.ip);
             if (!user) {
                 user = { weight: 0 };
+                if (rule.queueSize)
+                    user.queue = [];
                 rule.users.set(req.ip, user);
             }
             user.weight += rule.weight;
             if (user.weight > rule.maxWeight) {
                 if (options && options.logFunction)
                     options.logFunction(req.ip, req.path, user.weight, rule.maxWeight, rule.regexp || rule.string);
-                return res.status(rule.errorCode).send(rule.errorData);
+                if (user.queue && user.queue.length < rule.queueSize)
+                    user.queue.push(next);
+                else
+                    res.status(rule.errorCode).send(rule.errorData);
             }
             next();
         };
         rule.check = function() {
             rule.users.forEach(function(user, ip) {
                 user.weight -= rule.maxWeight;
+                var count = rule.maxWeight - user.weight;
+                if (user.queue && count > 0) {
+                    user.queue.splice(0, count).forEach(function(next) {
+                        setTimeout(next, 0);
+                    });
+                    user.weight += count;
+                }
                 if (user.weight <= 0)
                     rule.users.delete(ip);
             });
