@@ -33,7 +33,7 @@ module.exports = function(options) {
             rule.users.forEach(function(user, ip) {
                 user.weight -= rule.maxWeight;
                 var count = rule.maxWeight - user.weight;
-                if (user.queue && count > 0) {
+                if (user.queue && user.queue.length > 0 && count > 0) {
                     user.queue.splice(0, count).forEach(function(next) {
                         setTimeout(next, 0);
                     });
