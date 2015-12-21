@@ -1,0 +1,25 @@
+{
+  "name": "ddos-express",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/ololoepepe/ddos-express.git"
+  },
+  "keywords": [
+    "ddos",
+    "express",
+    "limit",
+    "rate"
+  ],
+  "author": "Andrey Bogdanov <ololoepepe@gmail.com> (https://ololoepepe.me)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ololoepepe/ddos-express/issues"
+  },
+  "homepage": "https://github.com/ololoepepe/ddos-express"
+}
