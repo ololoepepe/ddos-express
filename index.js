@@ -2,7 +2,28 @@ module.exports = function(options) {
     var paths = {};
     var rules = [];
     var createRule = function(rule) {
-        rule.users = new Map;
+        if (typeof Map != "undefined") {
+            rule.users = new Map;
+        } else {
+            console.warn("'Map' constructor is not defined, falling back to a plain object.");
+            rule.users = {
+                set: function(key, value) {
+                    this[key] = value;
+                },
+                get: function(key) {
+                    return this[key];
+                },
+                forEach: function(f) {
+                    for (var key in this) {
+                        if (this.hasOwnProperty(key))
+                            f(this[key], key);
+                    }
+                },
+                delete: function(key) {
+                    delete this[key];
+                }
+            };
+        }
         rule.weight = rule.weight || (options && options.weight) || 1;
         rule.maxWeight = rule.maxWeight || (options && options.maxWeight) || 10;
         rule.errorCode = rule.errorCode || (options && options.errorCode) || 429;
