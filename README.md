@@ -1,6 +1,6 @@
 Configurable Denial-Of-Service prevention library for Express
 
-# This module is outdated. Please, use [https://www.npmjs.com/package/dddos](DDDoS) instead.
+# This module is outdated. Please, use [DDDoS](https://www.npmjs.com/package/dddos) instead.
 
 # Example
 
